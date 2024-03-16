@@ -14,7 +14,7 @@ export const errorMiddleware = (err, req, res, next)=>{
 
     return res.status(err.statusCode).json({
         success: false,
-        message: "Invalid Id"
+        message: err.message,
     })
 }
 

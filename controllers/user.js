@@ -6,24 +6,27 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
 
-
-export const register =  async (req, res)=>{
-
+export const register = async (req, res, next) => {
     try {
-        const {name, email, password} = req.body;
+        const { name, email, password } = req.body;
 
-        let user = await User.findOne({email})
-    
-        if(user) 
-            return next(new ErrorHandler("User Already Exists", 404))
-    
-    
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create the user if it doesn't exist
+            user = new User({ name, email, password });
+            await user.save();
+        } else {
+            // Optionally, you can return an error here if the user already exists
+            return next(new ErrorHandler("User Already Exists", 409));
+        }
+
+        // Send cookies for registration
         sendCookies(user, res, 201, "Registered Successfully");
     } catch (error) {
         next(error);
     }
-
-}
+};
 
 
 export const login = async (req, res, next)=>{
