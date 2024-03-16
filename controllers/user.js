@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import { sendCookies } from "../utilities/features.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import ErrorHandler from "../middlewares/error.js";
 
 
 export const register = async (req, res, next) => {
