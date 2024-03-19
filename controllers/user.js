@@ -30,33 +30,52 @@ export const register = async (req, res, next) => {
 };
 
 
+// export const login = async (req, res, next) => {
+//     try {
+//         const { email, password } = req.body;
+//         console.log("Received login request:", { email, password });
+
+//         const user = await User.findOne({ email }).select("+password");
+
+//         if (!user) {
+//             console.log("User not found for email:", email);
+//             return next(new ErrorHandler("Invalid email or password", 404));
+//         }
+
+//         const isMatch = await bcrypt.compare(password, user.password);
+//         console.log("Password match:", isMatch);
+
+//         if (!isMatch) {
+//             console.log("Password does not match");
+//             return next(new ErrorHandler("Invalid email or password", 404));
+//         }
+
+//         sendCookies(user, res, 200, `Logged In Successfully -> Welcome back ${user.name}`);
+//     } catch (error) {
+//         console.error("Login error:", error);
+//         next(error);
+//     }
+// };
+
+
 export const login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        console.log("Received login request:", { email, password });
-
-        const user = await User.findOne({ email }).select("+password");
-
-        if (!user) {
-            console.log("User not found for email:", email);
-            return next(new ErrorHandler("Invalid email or password", 404));
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        console.log("Password match:", isMatch);
-
-        if (!isMatch) {
-            console.log("Password does not match");
-            return next(new ErrorHandler("Invalid email or password", 404));
-        }
-
-        sendCookies(user, res, 200, `Logged In Successfully -> Welcome back ${user.name}`);
+      const { email, password } = req.body;
+  
+      const user = await User.findOne({ email }).select("+password");
+  
+      if (!user) return next(new ErrorHandler("Invalid Email or Password", 400));
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+  
+      if (!isMatch)
+        return next(new ErrorHandler("Invalid Email or Password", 400));
+  
+      sendCookies(user, res, 200, `Welcome back, ${user.name}`);
     } catch (error) {
-        console.error("Login error:", error);
-        next(error);
+      next(error);
     }
-};
-
+  };
 
 export const getMyProfile =  async (req, res, next)=>{
 
