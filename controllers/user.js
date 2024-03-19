@@ -41,7 +41,7 @@ export const login = async (req, res, next)=>{
             return next(new ErrorHandler("Invalid email or password", 404))
     
     
-        const isMatch = bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
     
         if(!isMatch) 
             return next(new ErrorHandler("Invalid email or password", 404))
